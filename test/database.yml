@@ -1,0 +1,10 @@
+sqlite3:
+  adapter: sqlite3
+  database: vendor/plugins/bank_center/test/bank_center.sqlite3
+
+mysql:
+  adapter: mysql
+  hostname: localhost
+  username: root
+  password:
+  database: bank_center
