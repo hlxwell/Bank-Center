@@ -1,13 +1,17 @@
-BankCenter
+Bank Center
 ==========
+This is a rails plugin which is about user money account management solution.
+Like below is a user's money account:
+money sender   money receiver   amount    money type   paid at    state
+AAA            BBB              +10       USD          9/9/2012   done
+CCC            BBB              +1        USD          9/9/2012   done
+BBB            DDD              -3        USD          9/9/2012   done
+EEE            BBB              +5        USD          ...        pending
+                  Total Amount: 8 (USD)
 
-Introduction goes here.
-
-
-Example
+How-To
 =======
+1. rake db:migrate:bank_center
 
-Example goes here.
 
-
-Copyright (c) 2010 [name of plugin creator], released under the MIT license
+Copyright (c) 2010 Michael He, released under the MIT license
