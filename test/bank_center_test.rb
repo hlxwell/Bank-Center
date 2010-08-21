@@ -1,8 +1,9 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 class BankCenterTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  load_schema
+
+  test "schema has loaded correctly" do
+    assert_equal [], Bank::Transaction.all
   end
 end
