@@ -1,5 +1,4 @@
 class Bank::Account < ActiveRecord::Base
-  CREDIT_TYPES = ["money", "job_credit", "ads_credit", "resume_download_credit"]
   set_table_name "bank_accounts"
 
   validates_presence_of :name, :on => :create, :message => "can't be blank"
@@ -9,32 +8,32 @@ class Bank::Account < ActiveRecord::Base
   has_many :positive_bank_transactions, :class_name => "Bank::PositiveTransaction", :foreign_key => "bank_account_id"
   has_many :negative_bank_transactions, :class_name => "Bank::NegativeTransaction", :foreign_key => "bank_account_id"
 
-  def remains(type = CREDIT_TYPES[0])
-    bank_transactions.sum(:amount)
+  def remains(type = Bank::Transaction::CREDIT_TYPES.first)
+    bank_transactions.sum(:amount, :conditions => { :credit_type => type })
   end
 
   ### basic operations
-  def charge amount
-    ensure_positive_number(amount)
-    positive_bank_transactions.create!(:amount => amount)
-  end
-
-  def pay amount
-    ensure_positive_number(amount)
-    negative_bank_transactions.create!(:amount => - amount)
-  end
-
-  def refund amount
-    ensure_positive_number(amount)
-    positive_bank_transactions.create!(:amount => amount)
-  end
-
-  def withdrawal amount
-    ensure_positive_number(amount)
-    negative_bank_transactions.create!(:amount => - amount)
+  ["charge", "pay", "refund", "withdrawal"].each do |operation|
+    class_eval <<-EOF
+      def #{operation} amount, type = Bank::Transaction::CREDIT_TYPES.first
+        ensure_positive_number amount
+        operate_credit amount, "#{operation}", type
+      end
+    EOF
   end
 
 private
+
+  def operate_credit amount, operation, type
+    case operation
+    when "charge", "refund"
+      positive_bank_transactions.create!(:amount => amount, :credit_type => type)
+    when "pay", "withdrawal"
+      negative_bank_transactions.create!(:amount => - amount, :credit_type => type)
+    else
+      raise "unknown operation"
+    end
+  end
 
   def ensure_positive_number amount
     raise NegativeNumberError.new if amount <= 0
