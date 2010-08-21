@@ -1,8 +1,8 @@
 ActiveRecord::Schema.define(:version => 0) do
-  create_table :transactions, :force => true do |t|
+  create_table :bank_transactions, :force => true do |t|
     t.string      "type"
-    t.references  "parent", :polymorphic => true
-    t.references  "related_object", :polymorphic => true
+    t.integer     "bank_account_id"
+    # t.references  "related_object",   :polymorphic => true
     t.string      "credit_type"
     t.string      "credit_from"
     t.string      "credit_to"
@@ -11,6 +11,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string      "note"
     t.datetime    "done_at"
     t.datetime    "deleted_at"
+    t.timestamps
+  end
+
+  create_table :bank_accounts, :force => true do |t|
+    t.references  "parent",           :polymorphic => true
+    t.string      "name"
     t.timestamps
   end
 end

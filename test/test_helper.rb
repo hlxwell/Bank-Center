@@ -4,6 +4,7 @@ ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
 require 'rubygems'
 require 'test/unit'
 require 'active_support'
+require 'pp'
 require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config/environment.rb'))
 
 def load_schema

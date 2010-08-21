@@ -1,13 +1,13 @@
 Bank Center
 ==========
-This is a rails plugin which is about user money account management solution.
+This is a rails plugin which is about user credit account management solution.
 Like below is a user's money account:
-money sender   money receiver   amount    money type   paid at    state
-AAA            BBB              +10       USD          9/9/2012   done
-CCC            BBB              +1        USD          9/9/2012   done
-BBB            DDD              -3        USD          9/9/2012   done
-EEE            BBB              +5        USD          ...        pending
-                  Total Amount: 8 (USD)
+
+Action    credit from   credit to   amount  remains   credit type   paid at     state
+Charge    PayPal        UserA       +10     10        USD           9/9/2012    done
+Pay       UserA         ProductA    -1      9         USD           9/9/2012    done
+Refund    ProductA      UserA       +1      10        USD           9/9/2012    done
+Withdraw  UserA         PayPal      -10     0         USD           9/9/2012    done
 
 How-To
 =======
