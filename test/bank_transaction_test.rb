@@ -5,7 +5,7 @@ class BankTransactionTest < ActiveSupport::TestCase
 
   def setup
     @account = Bank::Account.create(:name => "test")
-    @transaction = @account.charge(100)
+    @transaction = @account.charge!(100)
   end
 
   def teardown
@@ -22,13 +22,24 @@ class BankTransactionTest < ActiveSupport::TestCase
     assert_nil Bank::Transaction.find_by_id(@transaction.id)
   end
 
-  # test "charge money to account" do
-  #   @account.charge(100)
-  #   assert_equal 100, @account.remains
-  # end
-  #
-  # test "charge job credit to account" do
-  #   @account.charge(1, "job_credit")
-  #   assert_equal 1, @account.remains("job_credit")
-  # end
+  test "should be able to list all deleted transactions" do
+    @transaction.destroy
+    assert_nil Bank::Transaction.with_deleted.find_by_id(@transaction.id)
+  end
+
+  test "should use the init state 'waiting'" do
+    assert_equal 'waiting', @transaction.state
+  end
+
+  test "should be able to 'accept' and 'cancel'" do
+    @transaction.cancel
+    assert_equal 'cancelled', @transaction.state
+  end
+
+  test "should be able to accept" do
+    @transaction.accept
+    assert_equal 'done', @transaction.state
+    assert_not_nil @transaction.done_at
+  end
+
 end

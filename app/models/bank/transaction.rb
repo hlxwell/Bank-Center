@@ -1,14 +1,27 @@
 class Bank::Transaction < ActiveRecord::Base
-  CREDIT_TYPES = ["money", "job_credit", "ads_credit", "resume_download_credit"]
   set_table_name :bank_transactions
 
-  default_scope :conditions => {:deleted_at => nil}
-  scope :with_deleted, :conditions => "deleted_at IS NOT NULL"
+  include EnumerateIt
+  has_enumeration_for :credit_type, :with => CreditType, :create_helpers => true
+
+  default_scope where(:deleted_at => nil)
+  scope :with_deleted, where("deleted_at IS NOT NULL")
 
   belongs_to :bank_account, :class_name => "Bank::Account", :foreign_key => "bank_account_id"
+  belongs_to :related_object, :polymorphic => true
 
-  def self.find_with_destroyed *args
-    self.with_exclusive_scope { find(*args) }
+  state_machine :initial => 'waiting' do
+    event :accept do
+      transition :from => 'waiting', :to => 'done'
+    end
+
+    event :cancel do
+      transition :from => 'waiting', :to => 'cancelled'
+    end
+
+    after_transition :to => 'done' do |transition|
+      transition.touch :done_at
+    end
   end
 
   def destroy

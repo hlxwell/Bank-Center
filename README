@@ -9,8 +9,14 @@ Pay       UserA         ProductA    -1      9         USD           9/9/2012    
 Refund    ProductA      UserA       +1      10        USD           9/9/2012    done
 Withdraw  UserA         PayPal      -10     0         USD           9/9/2012    done
 
+Requirements
+=========
+Add requirements to Gemfile
+gem 'enumerate_it'
+gem 'state_machine'
+
 How-To
-=======
+=========
 1. rake db:migrate:bank_center
 
 
