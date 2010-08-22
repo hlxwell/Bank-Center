@@ -7,9 +7,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string      "from"
     t.string      "to"
     t.integer     "amount"
-    t.string      "state"
     t.string      "note"
-    t.datetime    "done_at"
+    t.string      "cancel_reason"
+    t.datetime    "cancelled_at"
     t.datetime    "deleted_at"
     t.timestamps
   end

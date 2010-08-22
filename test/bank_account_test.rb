@@ -35,4 +35,18 @@ class BankAccountTest < ActiveSupport::TestCase
       @account.pay!(101, :credit_type => CreditType::MONEY, :from => "account", :to => "serviceA", :related_object => @account) ### related_object
     end
   end
+
+  test "refund" do
+    pay_tx = @account.pay!(100)
+    assert_equal 0, @account.remains
+    @account.refund!(pay_tx.amount.abs, :from => 'productA', :related_object => pay_tx)
+    assert_equal 100, @account.remains
+  end
+  
+  test "cancel transaction" do
+    pay_tx = @account.pay!(100)
+    assert_equal 0, @account.remains
+    pay_tx.cancel!("regret to pay")
+    assert_equal 100, @account.remains
+  end
 end

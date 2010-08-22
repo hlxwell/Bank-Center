@@ -13,11 +13,18 @@ Requirements
 =========
 Add requirements to Gemfile
 gem 'enumerate_it'
-gem 'state_machine'
 
 How-To
 =========
-1. rake db:migrate:bank_center
+rake db:migrate:bank_center
 
+account = Bank::Account.new(:name => "my account")
+account.charge!(100, :credit_type => CreditType::MONEY, :from => 'paypal')
+account.pay!(20, :to => "productA")
+account.refund!(20, :from => "productA")
+account.withdraw!(100, :to => "paypal")
+
+Transaction can be cancelled, like 
+@transaction.cancel!('cancel reason')
 
 Copyright (c) 2010 Michael He, released under the MIT license

@@ -27,19 +27,13 @@ class BankTransactionTest < ActiveSupport::TestCase
     assert_nil Bank::Transaction.with_deleted.find_by_id(@transaction.id)
   end
 
-  test "should use the init state 'waiting'" do
-    assert_equal 'waiting', @transaction.state
-  end
+  test "should be able to 'cancel'" do
+    assert_raise(NoCancelReasonError) do
+      @transaction.cancel!
+    end
 
-  test "should be able to 'accept' and 'cancel'" do
-    @transaction.cancel
-    assert_equal 'cancelled', @transaction.state
-  end
-
-  test "should be able to accept" do
-    @transaction.accept
-    assert_equal 'done', @transaction.state
-    assert_not_nil @transaction.done_at
+    @transaction.cancel!("not received money.")
+    assert_not_nil @transaction.cancelled_at
   end
 
 end
