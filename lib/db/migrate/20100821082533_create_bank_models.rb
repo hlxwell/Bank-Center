@@ -23,7 +23,7 @@ class CreateBankModels < ActiveRecord::Migration
 
     add_index :bank_accounts, [:parent_type, :parent_id]
     add_index :bank_transactions, :credit_type
-    add_index :bank_transactions, [:parent_type, :parent_id]
+    add_index :bank_transactions, :bank_account_id
     add_index :bank_transactions, [:related_object_type, :related_object_id]
   end
 
