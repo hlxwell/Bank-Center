@@ -20,8 +20,8 @@ rake db:migrate:bank_center
 
 account = Bank::Account.new(:name => "my account")
 account.charge!(100, :credit_type => CreditType::MONEY, :from => 'paypal')
-account.pay!(20, :to => "productA")
-account.refund!(20, :from => "productA")
+pay_transaction = account.pay!(20, :to => "productA")
+account.refund!(20, :from => "productA", :related_object => pay_transaction)
 account.withdraw!(100, :to => "paypal")
 
 Transaction can be cancelled, like 
